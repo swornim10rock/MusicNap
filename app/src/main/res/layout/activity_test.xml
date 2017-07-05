@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.swornim.musicnap.customAdapterPackage.test">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/showTimeSeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:textAlignment="center"
+            android:textSize="30dp" />
+
+
+
+        <SeekBar
+            android:id="@+id/seekbarId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/showTimeSeek"
+
+            />
+
+
+        <LinearLayout
+            android:id="@+id/backforwarArrowLayout"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seekbarId"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+
+                android:id="@+id/backSeek"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@mipmap/ic_arrow_back_black_48dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" -5 Seconds 5+"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/forwardSeek"
+                android:layout_gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:src="@mipmap/ic_arrow_forward_black_48dp"
+                />
+
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/startTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/backforwarArrowLayout"
+            android:hint="Start Time" />
+
+        <EditText
+            android:id="@+id/endTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/startTime"
+            android:hint="End Time" />
+
+
+        <Button
+            android:id="@+id/clipper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/endTime"
+            android:layout_marginLeft="132dp"
+            android:layout_marginStart="132dp"
+            android:text="Clip Song" />
+
+        <Button
+            android:id="@+id/playOriginalSong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/clipper"
+            android:layout_marginLeft="132dp"
+            android:layout_marginStart="132dp"
+            android:text="Play Song" />
+
+        <Button
+            android:id="@+id/playClipped"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/playOriginalSong"
+            android:layout_marginLeft="132dp"
+            android:layout_marginStart="132dp"
+            android:text="PlayClipped" />
+
+        <Button
+            android:id="@+id/Done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/playClipped"
+            android:layout_marginLeft="132dp"
+            android:layout_marginStart="132dp"
+            android:text="Done " />
+
+        <Button
+            android:id="@+id/uploadSONG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/Done"
+            android:layout_marginLeft="132dp"
+            android:layout_marginStart="132dp"
+            android:text="Upload Song" />
+
+        <ProgressBar
+            android:id="@+id/circularSpinner"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignLeft="@+id/Done"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/Done"
+            android:layout_marginLeft="13dp"
+            android:layout_marginStart="13dp" />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

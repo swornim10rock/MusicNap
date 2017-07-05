@@ -1,0 +1,31 @@
+package com.example.cameramodule;
+
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.ResultReceiver;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Boolean status=checkCameraHardWare(getApplicationContext());
+        if(status==true)
+            Toast.makeText(getApplicationContext(),"Yes this device has camera",Toast.LENGTH_LONG).show();
+
+
+
+
+
+    }
+
+    private Boolean checkCameraHardWare(Context context){
+        if(context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA));
+        return true;
+
+    }
+}

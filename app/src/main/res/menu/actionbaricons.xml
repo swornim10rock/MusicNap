@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:icon="@mipmap/emotion3"
+        android:title="Recharge Number"
+        app:showAsAction="always"
+        android:id="@+id/addFreinds">
+    </item>
+
+    <item
+        android:icon="@mipmap/emotion1"
+        android:title="Story"
+        app:showAsAction="always"
+        android:id="@+id/storyImageIcon">
+    </item>
+
+
+</menu>

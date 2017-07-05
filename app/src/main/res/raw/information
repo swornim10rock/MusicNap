@@ -1,0 +1,74 @@
+
+
+<> Normally what happens in the adapter class is that it takes the
+   type as the array adapter types, if the type of the customadapter that extends
+   is an array adapter of object type then i have to send the list which an array
+   type.
+
+   Normally adapter is just an bucket of information which may be uninstallized first
+   during oncreate method but the class which has the list doesnot gets garbaged
+   or destyoed like a normal object because it the container or source of information
+   for the adapter
+
+   Everytime list view is called while scrolling the screen the adapter container acts
+   like the source for the list view then calling the getview method where the view
+   needs to be instantiated. The information is got from the class which calls this
+   class(extended array adapter). so everytime the class is called getview may not be called
+   but the bucket which is been used by the adapter gets updated
+   this update should ne notified to the adapter by using the notify method
+-------------------------------------------------------------------------------------------------------------
+  <> In the phone contacts list, the getcount method called from the cursor will return n users contacts
+   except yours own contacts
+------------------------------------------------------------------------------------------------------------------
+<>How to name any class?
+Normally name conflicts might occur when the user names the class names as same as the
+predefined class name. So always try to name the class name with the Letter M which normally
+is way of giving differnent name you can use anything just dont make it same
+-------------------------------------------------------------------------------------------------------------
+<> In case of dialog boxes if your are using a custom view design and then rendering to the dialog
+  box i.e dialog.secontentview(yourlayout)
+  In that case you cannot explitcitly set the text view or any widgets data by refering in this way:
+
+  textview.settext(...) or imageview.setimage(..)
+
+  Null point exception shall occur since the refernece is correct but the thing that you are setting
+  should be visible on the view port screen.
+
+  In that case better to refer through textview=dialog.findview(.....)
+  textview.settext(.....) this is because the dialog.contentview makes the view visible in the view
+  port to update its values
+
+  Refer the long click code which pops up the dialog box snapcall xml
+----------------------------------------------------------------------------------------------------------------------
+
+  <>How to make the single instance of any activity>
+  Normally if you goo inner deep in any activity then whenever u go in the back button
+  then all the instances of that activity gets re rendered
+  TO avoid such scenario you should change the launchmode attribute in the activity tag
+  which is done inside the android manefest file
+
+-------------------------------------------------------------------------------------------------------------
+in the firebase .child("").child("") will only point to the child node for the sake of updating the values
+if you want to listen to the child added and call the call back method then you should consider
+using the datasnapshot to extract data from it or use the other methods may be getrefernec("user/asda/ada")
+
+----------------------------------------------------------------------------------------------------------------
+Bitrate =total mp3 size in bytes/total mp3 duration in sec
+
+total mp3 size can be get by file.length() returnns size in bytes
+
+after calculation bitrate, use the Unitary method as
+1 second equals x bitrate sooo start time equals   starttime*bitrate which gives bytes of audio data
+---------------------------------------------------------------------------------------------------------
+Internal card location :System.getenv("EXTERNAL_STORAGE");
+External card location :System.getenv("SECONDARY_STORAGE") ;
+
+-------------------------------------------------------------------------------------------------------------
+You can use the dynamic broadcast receiver to handle the events like earphone plugged or not etc
+You can pass the intentfilter with the system intents values look the snaphome page registered..
+the broadcast receiver will only work when the user registeres the broadcast class
+
+You dont need to get the intents from the system user can pass the right filter intents to broadcast receiver
+User can create one broadcast receiver then filter the intent with its getintent values soo no need to create multiple
+classes of broadcast receiver for handlinf individual intents
+----------------------------------------------------------------------------------------------------------
