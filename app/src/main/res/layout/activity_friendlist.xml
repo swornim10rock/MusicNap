@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+
     android:id="@+id/friend_actitivity_list_id"
     tools:context="com.example.swornim.musicnap.customAdapterPackage.friendlist">
 
@@ -13,7 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/friendchatlist"
-        android:dividerHeight="2dp">
+        android:dividerHeight="2dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
 
 

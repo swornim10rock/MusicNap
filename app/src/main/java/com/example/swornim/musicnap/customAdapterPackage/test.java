@@ -1,6 +1,7 @@
 package com.example.swornim.musicnap.customAdapterPackage;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
@@ -61,6 +62,7 @@ public class test extends AppCompatActivity {
     private File file1;
     private File file2;
     private File file3;
+    private File musicStatus;
     private InputStream inputStream;
     private FileInputStream fileInputStream;
     private FileOutputStream fileout;
@@ -78,6 +80,7 @@ public class test extends AppCompatActivity {
     private long fileSize;
     private SeekBar seekBar;
     private TextView showTimeSeek;
+    private TextView uploadingStatusSong;
     private MediaPlayer mediaPlayer;
     private Handler mHandler=new Handler();
     private Handler updateProgressBarHandler=new Handler();
@@ -92,9 +95,12 @@ public class test extends AppCompatActivity {
     private ProgressBar progressbar;
     private boolean onpostFinished=true;//first time
     private StorageReference storageReference;
+    private StorageReference musicStatusStorageRef;
     private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private ImageView backSeek;
     private ImageView forwardSeek;
+    private String path;
+    private String musicName;
     private HeadsetBroadCastReceiver headsetBroadCastReceiver;
     private DatabaseReference mDatabaseReference=FirebaseDatabase.getInstance().getReference("users/musicnap");
 
@@ -104,6 +110,10 @@ public class test extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        Intent getIntent=getIntent();
+        path=getIntent.getStringExtra("path");
+        musicName=getIntent.getStringExtra("musicName");
+
         headsetBroadCastReceiver=new HeadsetBroadCastReceiver();
         IntentFilter intentFilter=new IntentFilter();
         intentFilter.addAction("android.intent.action.HEADSET_PLUG");
@@ -112,42 +122,47 @@ public class test extends AppCompatActivity {
         progressbar=(ProgressBar) findViewById(R.id.circularSpinner);
         progressbar.setVisibility(View.GONE);
 
+
+        uploadingStatusSong=(TextView) findViewById(R.id.uploadingStatusSong);
+        uploadingStatusSong.setText(musicName);
         backSeek=(ImageView) findViewById(R.id.backSeek);
         forwardSeek=(ImageView) findViewById(R.id.forwardSeek);
 
         startTimeEditText=(EditText) findViewById(R.id.startTime);
         endTimeEditText=(EditText) findViewById(R.id.endTime);
-        mButton=(Button) findViewById(R.id.clipper);
+//        mButton=(Button) findViewById(R.id.clipper);
         playClipped=(Button) findViewById(R.id.playClipped);
         playOriginalSong=(Button) findViewById(R.id.playOriginalSong);
-        Done=(Button) findViewById(R.id.Done);
         uploadSONG=(Button) findViewById(R.id.uploadSONG);
-        storageReference = firebaseStorage.getReferenceFromUrl("gs://fir-cloudmessage-ac7af.appspot.com").child("Users/"+"www.mp3");
+        musicStatusStorageRef = firebaseStorage.getReferenceFromUrl("gs://fir-cloudmessage-ac7af.appspot.com").child("Users/musicTest.mp3");
 
         file1 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/MusicNap/");//PRIMARY I.E INTERNAL STORAGE
         file2 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/MusicNap/gangs.mp3");
+        musicStatus = new File(path);
+        file2=musicStatus;//change this code to make default put comments
+        Log.i("mytag",path);
         if(!(file1.exists()))
         file1.mkdirs();
 
         file3 = new File(file1, "www.mp3");
         try {
-            inputStream = new FileInputStream(file2);
+            inputStream = new FileInputStream(musicStatus);
         } catch (FileNotFoundException e1) {
             e1.printStackTrace();
         }
 //            inputStream=getResources().openRawResource(R.raw.ganesh_chaturthi_jai_dev_jai_dev_mp3_49049);
         mediaMetadataRetriever = new MediaMetadataRetriever();
-        mediaMetadataRetriever.setDataSource(file2.getAbsolutePath());
+        mediaMetadataRetriever.setDataSource(musicStatus.getAbsolutePath());
 
         bitrate = Integer.parseInt(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
         bitrate/=(1000);//bits  for second for buffer calculations
-        Log.i("mytag","Actual file size "+file2.length()+"Bytes");
+        Log.i("mytag","Actual file size "+musicStatus.length()+"Bytes");
         durationString = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
         Log.i("mytag","Actual duration "+durationString);
 
         //calculates bytes per seconds
         durationInt = Integer.parseInt(durationString)/1000;//seconds
-        fileSize=file2.length();//bytes
+        fileSize=musicStatus.length();//bytes
         oneSecondBytes=fileSize/durationInt;
 
         Log.i("mytag", "Ok all  done");
@@ -178,45 +193,78 @@ public class test extends AppCompatActivity {
         uploadSONG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                uploadFileNow(file3,file3.getName());
+                uploadFileNow();
             }
         });
 
-
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                if (startTimeForClipper != null && endTimeForClipper != null) {
-
-                    try {
-                        oneSecondEquivalentBytes(oneSecondBytes);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    try {
-                       new PerformClippingProcess().execute();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }else
-                    Toast.makeText(getApplicationContext(),"Start/end time has not been initialized",Toast.LENGTH_LONG).show();
-            }
-        });
+//
+//        mButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//
+////                if (startTimeForClipper != null && endTimeForClipper != null) {
+////
+////                    try {
+////                        oneSecondEquivalentBytes(oneSecondBytes);
+////                    } catch (IOException e) {
+////                        e.printStackTrace();
+////                    }
+////
+////                    try {
+////                       new PerformClippingProcess().execute();
+////                    } catch (Exception e) {
+////                        e.printStackTrace();
+////                    }
+////                }else
+////                    Toast.makeText(getApplicationContext(),"Start/end time has not been initialized",Toast.LENGTH_LONG).show();
+//            }
+//        });
 
         playClipped.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mediaPlayer=new MediaPlayer();
-                try {
-                    mediaPlayer.setDataSource(file3.getAbsolutePath());
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                Toast.makeText(getApplicationContext(),file3.getAbsolutePath(),Toast.LENGTH_LONG).show();
+
+                if (mediaPlayer == null) {
+                    mediaPlayer = new MediaPlayer();
+                    try {
+                        mediaPlayer.setDataSource(file3.getAbsolutePath());
+                        mediaPlayer.prepare();
+                        mediaPlayer.start();
+                        seekBar.setMax(mediaPlayer.getDuration());
+                        mHandler.post(updateSongsTime);//call this runnable every 100 ms
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else if(mediaPlayer.isPlaying()){
+                        mediaPlayer.release();
+                        mediaPlayer=new MediaPlayer();
+                        try {
+                            mediaPlayer.setDataSource(file3.getAbsolutePath());
+                            mediaPlayer.prepare();
+                            mediaPlayer.start();
+                            seekBar.setMax(mediaPlayer.getDuration());
+                            mHandler.post(updateSongsTime);//call this runnable every 100 ms
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if(!mediaPlayer.isPlaying()){
+                    mediaPlayer=new MediaPlayer();
+                    try {
+                        mediaPlayer.setDataSource(file3.getAbsolutePath());
+                        mediaPlayer.prepare();
+                        mediaPlayer.start();
+                        seekBar.setMax(mediaPlayer.getDuration());
+                        mHandler.post(updateSongsTime);//call this runnable every 100 ms
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         });
@@ -224,43 +272,50 @@ public class test extends AppCompatActivity {
         playOriginalSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mediaPlayer=new MediaPlayer();
 
-                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mediaPlayer) {
+                if (mediaPlayer == null) {
+                        mediaPlayer = new MediaPlayer();
+                        try {
+                            mediaPlayer.setDataSource(musicStatus.getAbsolutePath());
+                            mediaPlayer.prepare();
+                            mediaPlayer.start();
+                            seekBar.setMax(mediaPlayer.getDuration());
+                            mHandler.post(updateSongsTime);//call this runnable every 100 ms
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else if(mediaPlayer.isPlaying()){
+                        mediaPlayer.reset();
+                        mediaPlayer=new MediaPlayer();
+                        try {
+                            mediaPlayer.setDataSource(musicStatus.getAbsolutePath());
+                            mediaPlayer.prepare();
+                            mediaPlayer.start();
+                            seekBar.setMax(mediaPlayer.getDuration());
+                            mHandler.post(updateSongsTime);//call this runnable every 100 ms
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else if(!mediaPlayer.isPlaying()){
+
+                    mediaPlayer=new MediaPlayer();
+                    try {
+                        mediaPlayer.setDataSource(musicStatus.getAbsolutePath());
+                        mediaPlayer.prepare();
                         mediaPlayer.start();
+                        seekBar.setMax(mediaPlayer.getDuration());
+                        mHandler.post(updateSongsTime);//call this runnable every 100 ms
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                });
 
-                try {
-                    mediaPlayer.setDataSource(file2.getAbsolutePath());
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                    seekBar.setMax(mediaPlayer.getDuration());
-                    mHandler.post(updateSongsTime);//call this runnable every 100 ms
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+                   }
                 }
-            }
         });
 
-        Done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(startTimeEditText.getText()!=null && endTimeEditText.getText()!=null) {
-
-                    startTimeForClipper = startTimeEditText.getText().toString();
-                    endTimeForClipper = endTimeEditText.getText().toString();
-                    startTimeEditText.setText(null);
-                    endTimeEditText.setText(null);
-                }else
-                    Toast.makeText(getApplicationContext(),"Enter the data",Toast.LENGTH_LONG).show();
-
-            }
-        });
 
         backSeek.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -305,13 +360,19 @@ public class test extends AppCompatActivity {
         @Override
         public void run() {
             startTime=mediaPlayer.getCurrentPosition();
+            int totalTimeSeconds=startTime/1000;
+          //  Log.i("mytag","totalSeconds "+String.valueOf(totalTimeSeconds));
             seekBar.setSecondaryProgress(startTime);
-            showTimeSeek.setText(
-                    String.format("%d min : %d sec",
-                            TimeUnit.MILLISECONDS.toMinutes((long) startTime),
-                            TimeUnit.MILLISECONDS.toSeconds((long) startTime)-
-                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)startTime)))
-            );
+
+            //time format
+//            showTimeSeek.setText(
+//                    String.format("%d min : %d sec",
+//                            TimeUnit.MILLISECONDS.toMinutes((long) startTime),
+//                            TimeUnit.MILLISECONDS.toSeconds((long) startTime)-
+//                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)startTime)))
+//            );
+
+            showTimeSeek.setText(totalTimeSeconds+" seconds");
             mHandler.post(updateSongsTime);
 
             if(!(mediaPlayer.isPlaying()))
@@ -430,6 +491,8 @@ public class test extends AppCompatActivity {
                 fileout = new FileOutputStream(file3);
                 fileout.write(music);
                 fileout.close();
+                //send to the server and render the song
+
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -441,30 +504,59 @@ public class test extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             //this method is called before the backgroudn thread runs only once
-//            onpostFinished=false;
-//            updateProgressBarHandler.post(updateProgressBar);//calling continuosly
             progressbar.setVisibility(View.VISIBLE);
 
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            Log.i("mytag","This is the progress updates");
+            progressbar.setProgress(values[0]);
 
         }
 
         @Override
         protected void onPostExecute(String data) {
             Log.i("mytag","clipping finished");
-            progressbar.setVisibility(View.GONE);
+//            progressbar.setVisibility(View.GONE);
 
 //            onpostFinished=true;
            }
     }
 
-    public void uploadFileNow(File file, final String songName) {
-        Uri fileTobeuploaded = Uri.fromFile(file);
-        UploadTask uploadTask = storageReference.putFile(fileTobeuploaded);
+    public void uploadFileNow() {
+
+        //get the start and endtime
+
+        if(startTimeEditText.getText()!=null && endTimeEditText.getText()!=null) {
+
+            startTimeForClipper = startTimeEditText.getText().toString();
+            endTimeForClipper = endTimeEditText.getText().toString();
+            startTimeEditText.setText(null);
+            endTimeEditText.setText(null);
+        }else
+            Toast.makeText(getApplicationContext(),"Enter the data in seconds",Toast.LENGTH_LONG).show();
+
+
+        //clip before uploading the songs status on the server
+        if (startTimeForClipper != null && endTimeForClipper != null) {
+
+            try {
+                oneSecondEquivalentBytes(oneSecondBytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                new PerformClippingProcess().execute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else
+            Toast.makeText(getApplicationContext(),"Start/end time has not been initialized",Toast.LENGTH_LONG).show();
+        //upload the song to the web
+
+        Uri fileTobeuploaded = Uri.fromFile(file3);
+        UploadTask uploadTask = musicStatusStorageRef.putFile(fileTobeuploaded);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -482,10 +574,11 @@ public class test extends AppCompatActivity {
 
                 // messageObject.setUploadingSongName(.....); this has been intialized from caller class
                 UserDatabaseInformation messageObject=new UserDatabaseInformation();
-                messageObject.setUploadingSongName(songName);
+                messageObject.setUploadingSongName(musicName);
                 messageObject.setUploadingFilePath(taskSnapshot.getDownloadUrl().toString());
                 messageObject.setUploaderUserName("Swornim Bikram Shah");
                 progressbar.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(),"Successfully Uploaded",Toast.LENGTH_LONG).show();
 
                 new FirebaseUserModel().new SaveFileInforDatabase(getApplicationContext(), messageObject).execute();
 
@@ -515,7 +608,7 @@ public class test extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        unregisterReceiver(headsetBroadCastReceiver);
+//        unregisterReceiver(headsetBroadCastReceiver);
     }
 
     @Override
@@ -526,7 +619,9 @@ public class test extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(headsetBroadCastReceiver);
+//        unregisterReceiver(headsetBroadCastReceiver);
     }
+
+
 }
 

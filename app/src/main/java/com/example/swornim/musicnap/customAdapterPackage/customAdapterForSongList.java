@@ -83,7 +83,7 @@ public class customAdapterForSongList extends ArrayAdapter<songList> {
 
                 AlertDialog.Builder popBox = new AlertDialog.Builder(getContext());
                 popBox.setTitle(" Upload This Song For Friends? ");
-                popBox.setCancelable(false);
+                popBox.setCancelable(true);
 
                 popBox.setPositiveButton("Yup", new DialogInterface.OnClickListener() {
                     @Override
@@ -96,6 +96,19 @@ public class customAdapterForSongList extends ArrayAdapter<songList> {
                         intent.putExtra("messageObject",messageObject);
                         Log.i("mytag","path "+messageObject.getUploadingFilePath());
                         context.startActivity(intent);
+                    }
+                });
+
+                popBox.setNegativeButton("Status", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String uriPath=songs.get(position).getSongAbsoutePath();
+                        Intent intent=new Intent(context,test.class);
+                        intent.putExtra("path",uriPath);
+                        intent.putExtra("musicName",songs.get(position).getSongName());
+                        context.startActivity(intent);
+
+
                     }
                 });
 

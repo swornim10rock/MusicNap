@@ -1,87 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:isScrollContainer="false"
     android:layout_height="match_parent"
-    android:background="@mipmap/back10"
     android:id="@+id/customMessageLayoutId"
-    android:baselineAligned="false"
     android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/customMessageListView"
-        android:layout_width="match_parent"
-        android:layout_height="360dp"
-        android:footerDividersEnabled="false"/>
 
-    <LinearLayout
+    <include
 
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="bottom"
-        android:background="#060606"
-        android:isScrollContainer="false"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/actualMessageView"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:hint="Write a message"
-                android:padding="10dp"
-                android:textColor="#ffffff"
-                android:textColorHint="#e9f334"
-                android:textColorLink="#ff1b94" />
-
-            <ImageView
-                android:id="@+id/sendImageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:background="#000000"
-                android:padding="4dp"
-                android:src="@android:drawable/ic_menu_send" />
+        layout="@layout/includelayout"/>
 
 
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:background="@android:color/background_dark"
-            android:orientation="vertical"
-            android:paddingTop="2dp">
-
-            <TextView
-                android:id="@+id/firebaseSongDisplay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text=""
-                android:textColor="@android:color/background_light"
-                android:textSize="16dp" />
-
-            <TextView
-                android:id="@+id/firebaseUploaderName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:textColor="@color/colorAccent"
-                android:textSize="14dp" />
-
-
-
-        </LinearLayout>
-
-
-
-    </LinearLayout>
-
-
-</LinearLayout>
+</FrameLayout>

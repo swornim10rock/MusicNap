@@ -58,7 +58,7 @@ public class UploadFileFirebase extends AppCompatActivity {
 
     public void uploadFileNow() {
         Uri fileTobeuploaded = Uri.fromFile(new File(messageObject.getUploadingFilePath()));
-        UploadTask uploadTask = storageReference.putFile(fileTobeuploaded);
+        UploadTask uploadTask = storageReference.putFile(fileTobeuploaded);//responsible for upload
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {

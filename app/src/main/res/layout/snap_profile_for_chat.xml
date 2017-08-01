@@ -1,86 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_dark"
     android:orientation="vertical">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/snap_profile_timer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="100dp" />
+
+
+    </FrameLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:id="@+id/snap_profile_for_chat_lowerLayout"
-        android:orientation="vertical"
-        android:background="#000000">
+        android:layout_alignParentBottom="true">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btnmessageHimHer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="#508df6"
+            android:text="Message"
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="330dp"
-                android:src="@mipmap/image_three"
-                android:id="@+id/snap_profile_userImage"
+            android:textColor="@android:color/background_light" />
 
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/snap_profile_timer"
-                android:textAlignment="center"
-                android:textSize="100dp"
-                android:textColor="#ffffff"
-                android:layout_gravity="center"
-             />
-
-
-        </FrameLayout>
-
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/lastOnline"
-            android:text="She was online 5 min ago"
-            android:padding="10dp"
-            android:background="#000000"
-            android:textColor="#ffffff"
-            android:textSize="18dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Message"
-                android:layout_marginLeft="10dp"
-                android:background="#508df6"
-                android:id="@+id/btnmessageHimHer"
-
-                />
-
-            <Button
-                android:id="@+id/btnSnapMusicProf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="170dp"
-                android:background="#508df6"
-                android:text="Snap Music" />
-
-
-        </LinearLayout>
-
+        <Button
+            android:id="@+id/btnSnapMusicProf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="170dp"
+            android:background="#508df6"
+            android:text="Snap Music"
+            android:textColor="@android:color/background_light" />
 
 
     </LinearLayout>
 
 
-
-
-
-</LinearLayout>
+</RelativeLayout>

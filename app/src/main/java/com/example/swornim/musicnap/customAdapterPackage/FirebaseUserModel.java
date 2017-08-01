@@ -28,6 +28,8 @@ import java.util.Random;
  */
 public class FirebaseUserModel {
 
+    private DatabaseReference registerYourselfRef = FirebaseDatabase.getInstance().getReference("users/");
+
     DatabaseReference  mdatabaseReference= FirebaseDatabase.getInstance().getReference("users/");
     //songs details variables
     private static String S0NGNAME;
@@ -120,8 +122,70 @@ public class FirebaseUserModel {
         @Override
         protected Void doInBackground(Void...params){
 
+            UserDatabaseInformation chatObject=new UserDatabaseInformation();
+            chatObject.setMes(messageObject.getMes());
+            chatObject.setUserName(messageObject.getUserName());
+
                 mdatabaseReference.
-                        child("musicnap/chats/")
+                        child("musicnap/"+messageObject.getRecePhnN()+"/friends/"+messageObject.getPhoneNumber()+"/chats/")
+                        .push()
+                        .setValue(chatObject);
+
+
+           return null;
+        }
+
+    }
+
+
+    public class InstantSeen extends AsyncTask<Void,Void,Void>{
+
+        private Context context;
+        private UserDatabaseInformation messageObject;
+
+
+        public InstantSeen(Context context,UserDatabaseInformation messageObject) {
+
+            this.messageObject=messageObject;
+            this.context=context;
+        }
+
+        @Override
+        protected Void doInBackground(Void...params){
+
+            UserDatabaseInformation chatObject=new UserDatabaseInformation();
+            chatObject.setSeenM(messageObject.getSeenM());
+
+            mdatabaseReference.
+                    child("musicnap/"+messageObject.getRecePhnN()+"/friends/"+messageObject.getPhoneNumber()+"/chats/")
+                    .push()
+                    .setValue(chatObject);
+
+
+            return null;
+        }
+
+    }
+
+
+    public class InstantMessagingMusic extends AsyncTask<Void,Void,Void>{
+
+        private Context context;
+        private UserDatabaseInformation messageObject;
+
+
+        public InstantMessagingMusic(Context context,UserDatabaseInformation messageObject) {
+
+            this.messageObject=messageObject;
+            this.context=context;
+        }
+
+        @Override
+        protected Void doInBackground(Void...params){
+
+
+                mdatabaseReference.
+                        child("musicnap/"+messageObject.getRecePhnN()+"/friends/"+messageObject.getPhoneNumber()+"/chats/")
                         .push()
                         .setValue(messageObject);
 
@@ -146,11 +210,11 @@ public class FirebaseUserModel {
 
         @Override
         protected Void doInBackground(Void...params){
-
-                mdatabaseReference.
-                        child("musicnap/songlist/")
-                        .push()
-                        .setValue(messageObject);
+//
+//                mdatabaseReference.
+//                        child("musicnap/songlist/")
+//                        .push()
+//                        .setValue(messageObject);
            return null;
         }
 
@@ -212,6 +276,34 @@ public class FirebaseUserModel {
         }
 
     }
+
+    //  registering process first time call
+    public class AddContactsToFirebase extends AsyncTask<Void,Void,Void>{
+        private Context context;
+        private List<MinorDetails> registerObject;
+        private UserDatabaseInformation messageObject;
+
+        public AddContactsToFirebase(Context context,UserDatabaseInformation messageObject) {
+            this.context=context;
+            this.messageObject =messageObject;
+        }
+
+        @Override
+        protected Void doInBackground(Void...params){
+
+
+            UserDatabaseInformation chatMessaege=new UserDatabaseInformation();
+            chatMessaege.setMes("Welcome");
+
+
+            for(int i=0;i<messageObject.getList().size();i++){
+                registerYourselfRef.child("musicnap/"+messageObject.getPhoneNumber()+"/friends/"+messageObject.getList().get(i).getFriensNumber()+"/chats/").push().setValue(chatMessaege);
+            }
+            return null;
+        }
+
+    }
+
 
 
 

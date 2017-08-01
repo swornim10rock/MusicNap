@@ -9,8 +9,8 @@ import java.util.List;
 public class UserDatabaseInformation implements Serializable {
 
     //just for the UI displaying of messages
-    private String currentMessageTobeSent;
-    private String isSongPlaying;
+    private String mes;
+    private String ply;//yup or nope
     private String streamNow;
 
 
@@ -29,6 +29,51 @@ public class UserDatabaseInformation implements Serializable {
     private String valueSongPath;
     private List<songList> uploadingSongsList;
     private String userName;//user name for distinguishing who called whom
+    private String seenM;
+    private String pM;
+    private String pUrl;
+    private String FriensNumber;
+    private List<UserDatabaseInformation> list;
+
+    public List<UserDatabaseInformation> getList() {
+        return list;
+    }
+
+    public void setList(List<UserDatabaseInformation> list) {
+        this.list = list;
+    }
+
+    public String getFriensNumber() {
+        return FriensNumber;
+    }
+
+    public void setFriensNumber(String friensNumber) {
+        FriensNumber = friensNumber;
+    }
+
+    public String getSeenM() {
+        return seenM;
+    }
+
+    public void setSeenM(String seenM) {
+        this.seenM = seenM;
+    }
+
+    public String getpM() {
+        return pM;
+    }
+
+    public void setpM(String pM) {
+        this.pM = pM;
+    }
+
+    public String getpUrl() {
+        return pUrl;
+    }
+
+    public void setpUrl(String pUrl) {
+        this.pUrl = pUrl;
+    }
 
     public String getUploaderUserName() {
         return uploaderUserName;
@@ -119,12 +164,12 @@ public class UserDatabaseInformation implements Serializable {
         this.musicnapRequest = musicnapRequest;
     }
 
-    public String getIsSongPlaying() {
-        return isSongPlaying;
+    public String getPly() {
+        return ply;
     }
 
-    public void setIsSongPlaying(String isSongPlaying) {
-        this.isSongPlaying = isSongPlaying;
+    public void setPly(String ply) {
+        this.ply = ply;
     }
 
     private String currentAppUserName;
@@ -136,7 +181,24 @@ public class UserDatabaseInformation implements Serializable {
 
     //songslist
     private String songName;
+    private String recePhnN;
+    private String usrN;
 
+    public String getRecePhnN() {
+        return recePhnN;
+    }
+
+    public void setRecePhnN(String recePhnN) {
+        this.recePhnN = recePhnN;
+    }
+
+    public String getUsrN() {
+        return usrN;
+    }
+
+    public void setUsrN(String usrN) {
+        this.usrN = usrN;
+    }
 
     public String getFriendName() {
         return friendName;
@@ -146,15 +208,13 @@ public class UserDatabaseInformation implements Serializable {
         this.friendName = friendName;
     }
 
-    public String getCurrentMessageTobeSent() {
-        return currentMessageTobeSent;
+    public String getMes() {
+        return mes;
     }
 
-    public void setCurrentMessageTobeSent(String currentMessageTobeSent) {
-        this.currentMessageTobeSent = currentMessageTobeSent;
+    public void setMes(String mes) {
+        this.mes = mes;
     }
-
-
 
     public String getCurrentAppUserName() {
         return currentAppUserName;

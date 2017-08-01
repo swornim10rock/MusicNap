@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/showTimeSeek"
@@ -68,28 +68,19 @@
         <EditText
             android:id="@+id/startTime"
             android:layout_width="match_parent"
+            android:inputType="number"
             android:layout_height="wrap_content"
             android:layout_below="@id/backforwarArrowLayout"
-            android:hint="Start Time" />
+            android:hint="Start Time in seconds" />
 
         <EditText
             android:id="@+id/endTime"
             android:layout_width="match_parent"
+            android:inputType="number"
             android:layout_height="wrap_content"
             android:layout_below="@id/startTime"
-            android:hint="End Time" />
+            android:hint="End Time in seconds" />
 
-
-        <Button
-            android:id="@+id/clipper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/endTime"
-            android:layout_marginLeft="132dp"
-            android:layout_marginStart="132dp"
-            android:text="Clip Song" />
 
         <Button
             android:id="@+id/playOriginalSong"
@@ -97,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/clipper"
+            android:layout_below="@+id/endTime"
             android:layout_marginLeft="132dp"
             android:layout_marginStart="132dp"
             android:text="Play Song" />
@@ -111,18 +102,8 @@
             android:layout_below="@+id/playOriginalSong"
             android:layout_marginLeft="132dp"
             android:layout_marginStart="132dp"
-            android:text="PlayClipped" />
+            android:text="Play Status" />
 
-        <Button
-            android:id="@+id/Done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/playClipped"
-            android:layout_marginLeft="132dp"
-            android:layout_marginStart="132dp"
-            android:text="Done " />
 
         <Button
             android:id="@+id/uploadSONG"
@@ -130,21 +111,33 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/Done"
+            android:layout_below="@+id/playClipped"
             android:layout_marginLeft="132dp"
             android:layout_marginStart="132dp"
             android:text="Upload Song" />
+
+        <TextView
+            android:id="@+id/uploadingStatusSong"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/uploadSONG"
+            android:text="adsadsa"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
 
         <ProgressBar
             android:id="@+id/circularSpinner"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_alignLeft="@+id/Done"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/Done"
-            android:layout_marginLeft="13dp"
-            android:layout_marginStart="13dp" />
-
+            android:layout_alignParentBottom="true" />
 
     </RelativeLayout>
 

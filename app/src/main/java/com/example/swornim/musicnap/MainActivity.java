@@ -50,6 +50,7 @@ import com.example.swornim.musicnap.customAdapterPackage.customAdapterForSongLis
 import com.example.swornim.musicnap.customAdapterPackage.friendlist;
 import com.example.swornim.musicnap.customAdapterPackage.songList;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
@@ -83,13 +84,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.songlist);
 
 
-
+        if(new CustomSharedPref(getApplicationContext()).getSharedPref("userName").equals("none")){
+            startActivity(new Intent(MainActivity.this,RegisterActivity.class));
+        }
         ListView listView=(ListView)findViewById(R.id.songListView);
         uploadSongsFirebase=(Button) findViewById(R.id.uploadSongsButton);
 
 
-        File external_storage_root_music= new File(musicFilepath);
-        new updateContacts().execute();
+        File external_storage_root_music= new File(musicFilepath);//original
+//        File external_storage_root_music= new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+        new updateContacts().execute();//update phone contaactsz
         collectedSongsList=new songList().syncAllSongs(external_storage_root_music);
 
         fill();//fill the song list
@@ -161,8 +165,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             String userName = new CustomSharedPref(getApplicationContext()).getSharedPref("userName");
-            if (userName.equals("none"))
-                showAlertDialog("UserName");
+//            if (userName.equals("none"))
+//                showAlertDialog("UserName");
         }
     }
 

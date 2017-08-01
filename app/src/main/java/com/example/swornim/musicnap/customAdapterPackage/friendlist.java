@@ -66,6 +66,7 @@ public class friendlist extends AppCompatActivity {
     private ListView friendchatList;
     private TextView snapCallUserName;
     private TextView snap_profile_timer;
+    private String freindNumber;
 
     private Button btnmessageHimHer;
     private Button btnSnapMusic;
@@ -74,6 +75,7 @@ public class friendlist extends AppCompatActivity {
     private ArrayAdapter<UserDatabaseInformation> firebaseAdapter;
     private List<UserDatabaseInformation> firebaseAdapterSource=new ArrayList<>();
     private DatabaseReference mDatabaseReferences;//for the retrieving the songs from firebase
+    private String[] staticFriends={"9813847444","9813054341","9841001504","9860569432","9841339287","9860206938"};
 
 
     @Override
@@ -81,19 +83,18 @@ public class friendlist extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendlist);
 
-
-
         friendchatList =(ListView) findViewById(R.id.friendchatlist);
         snapCallUserName=(TextView) findViewById(R.id.snapCallUserName);
 
-        adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,containerForAdapter);
+        adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,staticFriends);
         friendchatList.setAdapter(adapter);
-        InitializeContainer();
 
         friendchatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
                 setContentView(R.layout.snap_profile_for_chat);
+                 freindNumber=staticFriends[position];
+
                 notifyAllOnclickListener();
 
             }
@@ -105,7 +106,6 @@ public class friendlist extends AppCompatActivity {
     public void notifyAllOnclickListener(){
 
         snap_profile_timer=(TextView) findViewById(R.id.snap_profile_timer);
-        userProfilePic=(ImageView) findViewById(R.id.snap_profile_userImage);
         btnmessageHimHer=(Button) findViewById(R.id.btnmessageHimHer);
         btnSnapMusic=(Button) findViewById(R.id.btnSnapMusicProf);
 
@@ -113,7 +113,12 @@ public class friendlist extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent=new Intent(getApplicationContext(),SnapMusicHomePage.class);
+                Intent intent=new Intent(friendlist.this,SnapMusicHomePage.class);
+
+                UserDatabaseInformation messageObject=new UserDatabaseInformation();
+                messageObject.setPhoneNumber(freindNumber);
+                Log.i("mytag",freindNumber);
+                intent.putExtra("objectForChat",messageObject);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
 
@@ -124,10 +129,13 @@ public class friendlist extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                new CustomSharedPref(getApplicationContext()).setSharedPref("whichFriendTotalk",freindNumber);
+                new CustomSharedPref(getApplicationContext()).setSharedPref("whichFriendTotalkSnap",freindNumber);
+
                 final String userSongFilePath= new CustomSharedPreferance(getApplicationContext()).getSharedPref("userSongFilePath","none");
                 final ValueAnimator animator=new ValueAnimator();
-                animator.setObjectValues(3,1);
-                animator.setDuration(3000);
+                animator.setObjectValues(4,1);
+                animator.setDuration(2000);
                 animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
@@ -181,6 +189,7 @@ public class friendlist extends AppCompatActivity {
                                                     //to get the class object from eacb sub node or child just use in this way
 
                                                      UserDatabaseInformation messageObject=dataSnapshot.getValue(UserDatabaseInformation.class);
+
                                                      firebaseAdapterSource.add(messageObject);
                                                      firebaseAdapter.notifyDataSetChanged();
 
@@ -239,17 +248,6 @@ public class friendlist extends AppCompatActivity {
     }
 
 
-    public void InitializeContainer(){
-
-        MSQLiteDatabase msqLiteDatabase=new MSQLiteDatabase(getApplicationContext());
-        Map<String,Object> contactListMap=msqLiteDatabase.readAllContacts();
-
-        for(Map.Entry<String,Object> singleEntry : contactListMap.entrySet()) {
-            containerForAdapter.add(singleEntry.getKey().toLowerCase());
-        }
-        adapter.notifyDataSetChanged();//it notifies the source which the adapter is using
-    }
-
     @Override
     public void onBackPressed() {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -269,7 +267,8 @@ public class friendlist extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if(item.getItemId()==R.id.addFreinds){
-            startActivity(new Intent(friendlist.this,SnapMusicHomePage.class));
+            Intent intent=new Intent(friendlist.this,MainActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -324,24 +323,26 @@ public class friendlist extends AppCompatActivity {
             popBox.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    //set all the necessary flags and sent as chat message
+                    //play the song in your phone and send that song path to friends phone
 
-                    String userName=new CustomSharedPref(getApplicationContext()).getSharedPref("userName");
-                    messageObject.setUserName(userName);
-                    messageObject.setCurrentMessageTobeSent("Snap Music ");
-                    messageObject.setCurrentAppUserName("Friend");
+                    messageObject.setMes("Snap Music ");
+                    messageObject.setRecePhnN(new CustomSharedPref(getApplicationContext()).getSharedPref("whichFriendTotalkSnap"));
                     messageObject.setUploadingSongName(messageObject.getUploadingSongName());
                     messageObject.setMusicnapRequest("yes");
                     messageObject.setUploadingFilePath(messageObject.getUploadingFilePath());
+//                    messageObject.setRecePhnN(freindNumber);
+                    messageObject.setPhoneNumber(new CustomSharedPref(getApplicationContext()).getSharedPref("userPhoneNumber"));
 
-                    new FirebaseUserModel().new InstantMessaging(getApplicationContext(),messageObject).execute();
+                    Toast.makeText(getApplication(),messageObject.getPhoneNumber(),Toast.LENGTH_LONG).show();
+                    new FirebaseUserModel().new InstantMessagingMusic(getApplicationContext(),messageObject).execute();
 
-                  Intent intent=new Intent(getApplicationContext(),SnapMusicHomePage.class);
+                    Intent intent=new Intent(friendlist.this,SnapMusicHomePage.class);
 
-                    UserDatabaseInformation callOnce=new UserDatabaseInformation();
-                    callOnce.setStreamNow("yes");
-                    intent.putExtra("messageDetails",messageObject);
-                    intent.putExtra("callonce",callOnce);
+                    messageObject.setStreamNow("yes");
+                    messageObject.setPhoneNumber(new CustomSharedPref(getApplicationContext()).getSharedPref("whichFriendTotalk"));
+                    intent.putExtra("objectForMusic",messageObject);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Log.i("mytag","From music clicked"+messageObject.getPhoneNumber());
                     startActivity(intent);
 
                     dialog.dismiss();
